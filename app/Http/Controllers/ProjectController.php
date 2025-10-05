@@ -20,6 +20,7 @@ class ProjectController extends Controller
         $startDate  = $request->get('start_date');
         $endDate    = $request->get('end_date');
 
+        //Eloquent ORM
         $projects = Project::with(['owner'])
             ->withCount(['tasks as total_tasks' => function ($query) {
                 $query->withTrashed(false);
@@ -35,6 +36,7 @@ class ProjectController extends Controller
             })
             ->paginate(10);
 
+        //Query Builder
         $projectStats = DB::table('projects')
             ->join('users', 'projects.user_id', '=', 'users.id')
             ->leftJoin('tasks', function ($join) {
